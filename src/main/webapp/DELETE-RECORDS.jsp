@@ -29,6 +29,8 @@
 				select * from PRODUCT;
 		</sql:query>	
 		
+		<!-- set the existFlag to false by default - i.e product with product no. doesn't exist -->
+		<c:set var="existflag" value="false" />
 		<!-- Delete records by product id - first check if searched product no. exists, then loop 
 		through all the records in the db matching the entered product no., if matches delete that record -->
 		<c:if test="${not empty param.searchpno}">
@@ -38,25 +40,17 @@
 						delete from PRODUCT WHERE ProductNo=?;
 						<sql:param value="${param.searchpno}" />
 					</sql:update>
+					<!-- set the existFlag to true since product id exists in the database -->
+					<c:set var="existflag" value="true" />
 					<div class="validation-success">Product ${row['ProductNo']} has been deleted from the database!</div>
 				</c:if>
 			</c:forEach>
 		</c:if>
-			
-		<!-- execute the insert sql if the add product button is entered and the price is between 100 and 900-->
-		<c:if test="${not empty param.pno && param.price ge 100 && param.price le 900}">
-			<!-- inserting data into the table -->	
-			<sql:update dataSource = "${mydb}" var="count">
-			INSERT INTO PRODUCT (ProductNo, ProductName, ProductType, Manufacturer, Price, Weight) VALUES (?, ?, ?, ?, ?, ?)
-			  <sql:param value="${param.pno}" />
-			  <sql:param value="${param.pname}" />
-			  <sql:param value="${paramValues.ptype[0]}" />
-			  <sql:param value="${paramValues.manu[0]}" />
-			  <sql:param value="${param.price}" />
-			  <sql:param value="${param.weight}" />
-		  	</sql:update>
-  		</c:if>
-  		
+		
+		<!-- if the product id doesn't exist in the database, display an error -->
+		<c:if test="${not empty param.searchpno && !existflag}">
+			<div class="validation-error">Product ${param.searchpno} doesn't exist in the database!</div>
+		</c:if>
   		
   		<div class="db-result">
 	  		<!-- display the records from the database -->

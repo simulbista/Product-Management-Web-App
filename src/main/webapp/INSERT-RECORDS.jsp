@@ -17,16 +17,16 @@
 			Product Name: <input type="text" name="pname"/><br>
 			Product Type:
 			<div>
-			<label><input type="radio" name="ptype" value="home-app"> Home Appliance</label>
-			<label><input type="radio" name="ptype" value="comp-hard"> Computer Hardware</label>
-			<label><input type="radio" name="ptype" value="game-con"> Game Console</label>
-			<label><input type="radio" name="ptype" value="cloth"> Clothing</label>
+			<label><input type="radio" name="ptype" value="Home Appliance">Home Appliance</label>
+			<label><input type="radio" name="ptype" value="Computer Hardware">Computer Hardware</label>
+			<label><input type="radio" name="ptype" value="Game Console">Game Console</label>
+			<label><input type="radio" name="ptype" value="Clothing">Clothing</label>
 			</div><br>
 			Manufacturer:
 			<select name="manu">
-			  <option value="lg" selected>LG</option>
-			  <option value="sony">Sony</option>
-			  <option value="pana">Panasonic</option>
+			  <option value="LG" selected>LG</option>
+			  <option value="Sony">Sony</option>
+			  <option value="Panasonic">Panasonic</option>
 			</select>
 			<br>
 			Price: <input type="text" name="price"/>
@@ -44,7 +44,7 @@
 			url="jdbc:mysql://localhost:3306/A3" user="root"
 			password="root" />
 			
-		<!-- execute the insert sql if the add product button is entered and the price is between 100 and 900-->
+		<!-- execute the insert sql if the product no. exists and the price is between 100 and 900-->
 		<c:if test="${not empty param.pno && Double.parseDouble(param.price) ge 100 && Double.parseDouble(param.price) le 900}">
 			<!-- inserting data into the table -->	
 			<sql:update dataSource = "${mydb}" var="count">
@@ -56,12 +56,17 @@
 			  <sql:param value="${param.price}" />
 			  <sql:param value="${param.weight}" />
 		  	</sql:update>
+		  	<div class="validation-success">Product ${param.pno} has been inserted into the database!</div>
   		</c:if>
   		
-  		<!--display validation error if price is not between $100 and $900 -->
+  		
   		<div class="price-validation">
-  		<c:if test="${not empty param.price && param.price le 100.00 || param.price ge 900.00}">
-  			<div class="validation-error">Price needs to be between $100 and $900!</div>
+  		<!--check if price is not empty first, as parsing null string willthrow an exception, hence nested ifs -->
+  		<c:if test="${not empty param.price}">
+  		<!--display validation error if price is not between $100 and $900 -->
+  			<c:if test="${Double.parseDouble(param.price) le 99.99 || Double.parseDouble(param.price) ge 900.01}">
+  				<div class="validation-error">Price needs to be between $100 and $900!</div>
+  			</c:if>
   		</c:if>
   		</div>
   		
