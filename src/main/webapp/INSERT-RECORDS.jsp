@@ -45,7 +45,7 @@
 			password="root" />
 			
 		<!-- execute the insert sql if the add product button is entered and the price is between 100 and 900-->
-		<c:if test="${not empty param.pno && param.price ge 100 && param.price le 900}">
+		<c:if test="${not empty param.pno && Double.parseDouble(param.price) ge 100 && Double.parseDouble(param.price) le 900}">
 			<!-- inserting data into the table -->	
 			<sql:update dataSource = "${mydb}" var="count">
 			INSERT INTO PRODUCT (ProductNo, ProductName, ProductType, Manufacturer, Price, Weight) VALUES (?, ?, ?, ?, ?, ?)
@@ -60,8 +60,8 @@
   		
   		<!--display validation error if price is not between $100 and $900 -->
   		<div class="price-validation">
-  		<c:if test="${not empty param.price && param.price le 100 || param.price ge 900}">
-  			<h5>Price needs to be between $100 and $900!</h5>
+  		<c:if test="${not empty param.price && param.price le 100.00 || param.price ge 900.00}">
+  			<div class="validation-error">Price needs to be between $100 and $900!</div>
   		</c:if>
   		</div>
   		

@@ -13,8 +13,8 @@
 	<div class="input">
 	<h2>DELETE RECORDS</h2>
 		<form method="post">
-			Enter Product No.: <input type="text" name="pno"/><br>
-			<button type="submit" name="delProduct">Delete the Product!</button>
+			Enter Product No.: <input type="text" name="searchpno"/><br>
+			<button type="submit">Delete the Product!</button>
 		</form>
 	</div>
 
@@ -24,17 +24,24 @@
 			password="root" />
 		
 		<!--  if the entered product no. exists in the database -->	
-			
-		<c:forEach var='row' items="${rs.rows}">
-			<tr>
-				<td>${row['ProductNo']}</td>
-				<td>${row['ProductName']}</td>
-				<td>${row['ProductType']}</td>
-				<td>${row['Manufacturer']}</td>
-				<td>${row['Price']}</td>
-				<td>${row['Weight']}</td>
-			</tr>
-		</c:forEach>
+
+		<sql:query dataSource = "${mydb}" var="rs">
+				select * from PRODUCT;
+		</sql:query>	
+		
+		<!-- Delete records by product id - first check if searched product no. exists, then loop 
+		through all the records in the db matching the entered product no., if matches delete that record -->
+		<c:if test="${not empty param.searchpno}">
+			<c:forEach var='row' items="${rs.rows}">
+				<c:if test="${row['ProductNo'] == param.searchpno}">
+					<sql:update dataSource = "${mydb}" var="count">
+						delete from PRODUCT WHERE ProductNo=?;
+						<sql:param value="${param.searchpno}" />
+					</sql:update>
+					<div class="validation-success">Product ${row['ProductNo']} has been deleted from the database!</div>
+				</c:if>
+			</c:forEach>
+		</c:if>
 			
 		<!-- execute the insert sql if the add product button is entered and the price is between 100 and 900-->
 		<c:if test="${not empty param.pno && param.price ge 100 && param.price le 900}">
