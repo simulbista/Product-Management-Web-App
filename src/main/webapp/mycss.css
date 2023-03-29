@@ -1,0 +1,38 @@
+form {
+	display: flex;
+	flex-direction: column;
+	background-color: #d3d3d3;
+	border: 1px #0000FF solid;
+	padding: 20px;
+}
+
+.input {
+	width: 700px;
+	margin: 0 auto;
+}
+
+button[type="submit"], button[type="reset"] {
+	width: 100px; /* Set a fixed width for the buttons */
+	margin: 0 auto;
+}
+
+.output {
+	width: 700px;
+	margin: 0 auto;
+	display: flex;
+	margin-top: 10px;
+	flex-direction: column;
+	background-color: #d3d3d3;
+	border: 1px #0000FF solid;
+	padding: 20px;
+	flex-direction: column;
+}
+
+.price-validation{
+	text-align:center;
+}
+
+.db-result{
+	width: 700px;
+	margin: 0 auto;
+}
